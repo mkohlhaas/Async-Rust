@@ -1,8 +1,7 @@
+use std::env;
 use std::fs::File;
 use std::io::Write;
-use std::env;
 use std::process::{Command, Stdio};
-
 
 fn main() {
     let child_process_code = r#"
@@ -22,12 +21,10 @@ fn main() {
     }
     "#;
 
-
     // Create a temporary file
     let mut temp_dir = env::temp_dir();
     temp_dir.push("child_process_code.rs");
     let mut file = File::create(&temp_dir).expect("Failed to create temporary file");
-
 
     // Write the Rust code to the temporary file
     file.write_all(child_process_code.as_bytes())
@@ -35,12 +32,11 @@ fn main() {
 
     // Compile the child process code
     let compile_output = Command::new("rustc")
-    .arg("-o")
-    .arg("child_process")
-    .arg(&temp_dir)
-    .output()
-    .expect("Failed to compile child process code");
-
+        .arg("-o")
+        .arg("child_process")
+        .arg(&temp_dir)
+        .output()
+        .expect("Failed to compile child process code");
 
     if !compile_output.status.success() {
         eprintln!(
@@ -56,14 +52,10 @@ fn main() {
         .spawn()
         .expect("Failed to spawn child process");
 
-
     println!("Child process spawned with PID: {}", child.id());
-
 
     // Wait for the child process to finish
     let status = child.wait().expect("Failed to wait for child process");
 
-
     println!("Child process terminated with status: {:?}", status);
-
 }

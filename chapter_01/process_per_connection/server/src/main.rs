@@ -1,6 +1,5 @@
 use std::process::{Command, Output};
 
-
 fn main() {
     // Replace `./path_to_your_binary` with the actual path to your compiled binary
     let output: Output = Command::new("./connection_bin")

@@ -1,14 +1,12 @@
-use std::ptr;
 use std::future::Future;
 use std::pin::Pin;
+use std::ptr;
 use std::task::{Context, Poll};
-
 
 struct SelfReferential {
     data: String,
     self_pointer: *const String,
 }
-
 
 impl SelfReferential {
     fn new(data: String) -> SelfReferential {
@@ -26,7 +24,6 @@ impl SelfReferential {
         }
     }
 }
-
 
 struct SimpleFuture {
     count: u32,
@@ -46,11 +43,10 @@ impl Future for SimpleFuture {
     }
 }
 
-
 fn main() {
     let first = SelfReferential::new("first".to_string());
     let moved_first = first; // Move the struct
-    // The original `first` is no longer valid; this might invalidate pointers 
-    //if pinning isn't used
+                             // The original `first` is no longer valid; this might invalidate pointers
+                             //if pinning isn't used
     moved_first.print();
 }

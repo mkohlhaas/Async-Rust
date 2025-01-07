@@ -25,7 +25,6 @@ impl<T: Greeting> Greeting for ExcitedGreeting<T> {
 
 // Usage
 fn main() {
-
     #[cfg(feature = "logging_decorator")]
     let hello = ExcitedGreeting { inner: HelloWorld };
 

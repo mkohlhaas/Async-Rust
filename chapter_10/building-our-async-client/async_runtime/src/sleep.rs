@@ -5,7 +5,6 @@ use std::{
     time::{Duration, Instant},
 };
 
-
 pub struct Sleep {
     when: Instant,
 }
@@ -17,11 +16,9 @@ impl Sleep {
     }
 }
 
-
 impl Future for Sleep {
     type Output = ();
-    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) 
-         -> Poll<Self::Output> {
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         let now = Instant::now();
         if now >= self.when {
             Poll::Ready(())

@@ -22,8 +22,7 @@ impl Coroutine<()> for ReadCoroutine {
     type Yield = i32;
     type Return = ();
 
-    fn resume(mut self: Pin<&mut Self>, _arg: ()) 
-    -> CoroutineState<Self::Yield, Self::Return> {
+    fn resume(mut self: Pin<&mut Self>, _arg: ()) -> CoroutineState<Self::Yield, Self::Return> {
         match self.lines.next() {
             Some(Ok(line)) => {
                 if let Ok(number) = line.parse::<i32>() {
@@ -36,7 +35,6 @@ impl Coroutine<()> for ReadCoroutine {
         }
     }
 }
-
 
 fn main() -> io::Result<()> {
     let mut coroutine = ReadCoroutine::new("./data.txt")?;

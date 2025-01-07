@@ -1,6 +1,5 @@
-use tokio::runtime::{Builder, Runtime};
 use std::sync::LazyLock;
-
+use tokio::runtime::{Builder, Runtime};
 
 static HIGH_PRIORITY: LazyLock<Runtime> = LazyLock::new(|| {
     Builder::new_multi_thread()
@@ -18,4 +17,3 @@ static LOW_PRIORITY: LazyLock<Runtime> = LazyLock::new(|| {
         .build()
         .unwrap()
 });
-

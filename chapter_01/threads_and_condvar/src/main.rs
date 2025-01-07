@@ -1,9 +1,8 @@
+use std::sync::atomic::AtomicBool;
+use std::sync::atomic::Ordering::Relaxed;
 use std::sync::{Arc, Condvar, Mutex};
 use std::thread;
 use std::time::Duration;
-use std::sync::atomic::AtomicBool;
-use std::sync::atomic::Ordering::Relaxed;
-
 
 fn main() {
     let shared_data = Arc::new((Mutex::new(false), Condvar::new()));
@@ -25,7 +24,6 @@ fn main() {
         let (lock, cvar) = &*shared_data;
         let values = [false, true, false, true];
 
-
         for i in 0..4 {
             let update_value = values[i as usize];
             println!("Updating value to {}...", update_value);
@@ -38,5 +36,4 @@ fn main() {
         cvar.notify_one();
     });
     updater_thread.join().unwrap();
-
 }

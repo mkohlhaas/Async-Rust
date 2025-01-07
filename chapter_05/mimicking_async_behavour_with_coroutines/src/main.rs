@@ -8,7 +8,6 @@ use std::{
     time::Instant,
 };
 
-
 struct SleepCoroutine {
     pub start: Instant,
     pub duration: std::time::Duration,
@@ -25,9 +24,7 @@ impl Coroutine<()> for SleepCoroutine {
     type Yield = ();
     type Return = ();
 
-    fn resume(
-        self: Pin<&mut Self>, _: ()) 
-    -> CoroutineState<Self::Yield, Self::Return> {
+    fn resume(self: Pin<&mut Self>, _: ()) -> CoroutineState<Self::Yield, Self::Return> {
         if self.start.elapsed() >= self.duration {
             CoroutineState::Complete(())
         } else {
@@ -39,23 +36,19 @@ impl Coroutine<()> for SleepCoroutine {
 impl Future for SleepCoroutine {
     type Output = ();
 
-    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) 
-        -> Poll<Self::Output> {
+    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         match Pin::new(&mut self).resume(()) {
             CoroutineState::Complete(_) => Poll::Ready(()),
             CoroutineState::Yielded(_) => {
                 cx.waker().wake_by_ref();
                 Poll::Pending
-            },
+            }
         }
     }
 }
 
-
 struct Executor {
-    coroutines: VecDeque<Pin<Box<
-        dyn Coroutine<(), Yield = (), Return = ()>
-    >>>,
+    coroutines: VecDeque<Pin<Box<dyn Coroutine<(), Yield = (), Return = ()>>>>,
 }
 
 impl Executor {
@@ -65,9 +58,7 @@ impl Executor {
         }
     }
 
-    fn add(&mut self, coroutine: Pin<Box<
-        dyn Coroutine<(), Yield = (), Return = ()>>>) 
-    {
+    fn add(&mut self, coroutine: Pin<Box<dyn Coroutine<(), Yield = (), Return = ()>>>) {
         self.coroutines.push_back(coroutine);
     }
 
@@ -77,20 +68,17 @@ impl Executor {
         match coroutine.as_mut().resume(()) {
             CoroutineState::Yielded(_) => {
                 self.coroutines.push_back(coroutine);
-            },
-            CoroutineState::Complete(_) => {},
+            }
+            CoroutineState::Complete(_) => {}
         }
     }
 }
-
 
 fn main() {
     let mut executor = Executor::new();
 
     for _ in 0..3 {
-        let coroutine = SleepCoroutine::new(
-            std::time::Duration::from_secs(1)
-        );
+        let coroutine = SleepCoroutine::new(std::time::Duration::from_secs(1));
         executor.add(Box::pin(coroutine));
     }
     let start = Instant::now();

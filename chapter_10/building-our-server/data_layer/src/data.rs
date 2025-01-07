@@ -21,7 +21,7 @@ impl Data {
         let mut field1_bytes = [0u8; 4];
         let mut field2_bytes = [0u8; 2];
 
-        // Read the first field (4 bytes) from the cursor into the buffer. Do the same for second field. 
+        // Read the first field (4 bytes) from the cursor into the buffer. Do the same for second field.
         cursor.read_exact(&mut field1_bytes)?;
         cursor.read_exact(&mut field2_bytes)?;
 
@@ -44,13 +44,15 @@ impl Data {
         // Read the third field's data from the cursor into the buffer
         cursor.read_exact(&mut field3_bytes)?;
 
-        // Convert the third field's bytes into a UTF-8 string, or return an error if this cannot be done. 
+        // Convert the third field's bytes into a UTF-8 string, or return an error if this cannot be done.
         let field3 = String::from_utf8(field3_bytes)
-            .map_err(|_| io::Error::new(
-                io::ErrorKind::InvalidData, "Invalid UTF-8"
-            ))?;
+            .map_err(|_| io::Error::new(io::ErrorKind::InvalidData, "Invalid UTF-8"))?;
 
         //  Return the structured data
-        Ok(Data { field1, field2, field3 })
+        Ok(Data {
+            field1,
+            field2,
+            field3,
+        })
     }
 }

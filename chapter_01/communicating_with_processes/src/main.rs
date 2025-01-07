@@ -1,15 +1,12 @@
 use std::io::{self, BufRead};
 use std::process;
 
-
 fn main() {
     let pid = process::id();
     println!("process ID: {}", pid);
 
-
     let stdin = io::stdin();
     let mut lines = stdin.lock().lines();
-
 
     loop {
         let line = match lines.next() {
@@ -22,4 +19,3 @@ fn main() {
         println!("Received: {}", line);
     }
 }
-
